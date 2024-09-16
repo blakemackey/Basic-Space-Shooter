@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //public fields are editable in unity ui
+    public Bullet bulletPrefab;
     public float thrustSpeed = 1f;
     public float rotationSpeed = 1;
     public bool isThrusting { get; private set; }
@@ -31,6 +32,11 @@ public class Player : MonoBehaviour
         } else {
             turnDirection = 0;
         }
+
+        //check for spacebar to send a bullet
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
+            Shoot();
+        }
     }
 
     //Then, call specific functions based on rigid body results
@@ -45,5 +51,10 @@ public class Player : MonoBehaviour
         if (turnDirection != 0f) {
             rb.AddTorque(turnDirection * rotationSpeed);
         }
+    }
+
+    private void Shoot() {
+        Bullet bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+        bullet.Project(transform.up);
     }
 }
